@@ -251,17 +251,19 @@ class Baseline:
                 # return an anomaly score for each feature set (9 features) in the feature matrix
                 anomaly_scores = iso_forest.decision_function(feature_matrix)
 
-                values, counts = np.unique(anomaly_scores, return_counts=True)
-                most_frequent = values[np.argmax(counts)]
+                time_series = np.arange(len(anomaly_scores))
 
-                print(f"Most frequent anomaly score: {most_frequent}")
+
+
+                print(f'min: {min(anomaly_scores)}')
+                print(f'max: {max(anomaly_scores)}')
+                print(f'mean: {np.ndarray.mean(anomaly_scores)}')
 
                 plt.figure(figsize=(10, 6))
-                plt.hist(anomaly_scores, bins=50, edgecolor='black', alpha=0.7)
-                plt.xlabel("Value")
-                plt.ylabel("Anomaly Score")
-                plt.title("Transmitting Intermittently")
-                plt.grid(axis='y', linestyle='--', alpha=0.7)
+                plt.scatter(time_series, anomaly_scores)
+                # plt.ylabel("Score")
+                # plt.ylabel("Incidence")
+                # plt.title("Transmition Distribution")
                 plt.show()
                 
                 
@@ -308,7 +310,7 @@ class Baseline:
 
 if __name__ == "__main__":
         async def main():
-                baseline = Baseline(sdr_ip='192.168.0.165', sdr_port=1234, sdr_freq=446000000, sdr_sample_rate=2048000, sdr_gain=10, num_samples=60000)
+                baseline = Baseline(sdr_ip='192.168.3.157', sdr_port=1234, sdr_freq=446000000, sdr_sample_rate=2048000, sdr_gain=10, num_samples=15000)
                 await baseline.detect_anomalies()
 
         asyncio.run(main())
